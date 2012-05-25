@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"> 
+	<title></title>
+  <script type="text/javascript" src="expanding_ad.js"></script>
+
+</head>
+<body>
+
+
+<div id="_wrapper">
+  <div id="_expanding_ad_container">
+    
+  </div>
+</div>
+
+<script type="text/javascript">
+  
+  //name generated via dropdown list
+  wpAd['expanding_'+'leaderboard'] = new wpAd.ExpandingAd({
+    'type' : 'leaderboard', //generated via dropdown list
+    'backupImage' : 'http://www.example.com/img.jpg',
+    'colSWF' : 'collapsed.swf',
+    'expSWF' : 'expanded.swf',
+    //'adid' : '%eaid',
+    'adid' : '',
+    'clickTracker' : '',
+    'minFlashVer' : 10,
+    'clickTags' : {
+      'clickTag' : 'http://www.google.com',
+      'clickTag2' : '',
+      'clickTag3' : '',
+      'clickTag4' : '',
+      'clickTag5' : '',
+      'clickTag6' : ''
+    },
+    'pixels' : {
+      'expand' : '',
+      'collapse' : ''
+    }
+  });
+
+  //testing:
+ /* try{
+    console.log(wpAd['expanding_'+'leaderboard']);
+  }catch(e){}*/
+  
+</script>
+
+</body>
+</html>
