@@ -118,7 +118,6 @@
   }
 
   ExpandingAd.prototype.collapse = function(){
-    console.time('t');
     if(this.expanded){
       this.expanded = false;
       this.empty().resize().swfDrop();
@@ -126,7 +125,6 @@
         this.addPixel(this.pixels.collpase);
       }
     }
-    console.timeEnd('t');
     return this;
   }
   
