@@ -3,49 +3,44 @@
 <head>
 	<meta charset="utf-8"> 
 	<title></title>
-  <script type="text/javascript" src="expanding_ad.js"></script>
 
 </head>
 <body>
 
 
-<div id="_wrapper">
-  <div id="_expanding_ad_container">
-    
-  </div>
+<div id="%eaid_wrapper">
+  <div id="%eaid_expanding_ad_container"></div>
 </div>
 
 <script type="text/javascript">
-  
-  //name generated via dropdown list
-  wpAd['expanding_'+'leaderboard'] = new wpAd.ExpandingAd({
-    'type' : 'leaderboard', //generated via dropdown list
-    'backupImage' : 'http://www.example.com/img.jpg',
-    'colSWF' : 'collapsed.swf',
-    'expSWF' : 'expanded.swf',
-    //'adid' : '%eaid',
-    'adid' : '',
-    'clickTracker' : '',
-    'minFlashVer' : 10,
-    'clickTags' : {
-      'clickTag' : 'http://www.google.com',
-      'clickTag2' : '',
-      'clickTag3' : '',
-      'clickTag4' : '',
-      'clickTag5' : '',
-      'clickTag6' : ''
-    },
-    'pixels' : {
-      'expand' : '',
-      'collapse' : ''
-    }
-  });
+  window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
+</script>
 
-  //testing:
- /* try{
-    console.log(wpAd['expanding_'+'leaderboard']);
-  }catch(e){}*/
-  
+<script type="text/javascript">
+  //jQuery.getScript('expandingAd.js', function(){
+  jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
+    wpAd['expanding_'+ type] = new wpAd.ExpandingAd({
+      'type' : type, //generated via dropdown list
+      'backupImage' : 'http://www.example.com/img.jpg',
+      'colSWF' : 'collapsed.swf',
+      'expSWF' : 'expanded.swf',
+      'adid' : '%eaid',
+      'clickTracker' : '%c',
+      'minFlashVer' : 10,
+      'clickTags' : {
+        'clickTag' : '%u',
+        'clickTag2' : '',
+        'clickTag3' : '',
+        'clickTag4' : '',
+        'clickTag5' : '',
+        'clickTag6' : ''
+      },
+      'pixels' : {
+        'expand' : '',
+        'collapse' : ''
+      }
+    });
+  });
 </script>
 
 </body>

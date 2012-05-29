@@ -1,11 +1,9 @@
-﻿(function(){
+(function(){
 
   "use strict";
   
-  window.wpAd = window.wpAd || {};
-  
   function ExpandingAd(atts){
-  
+    
     for(var key in atts){
       this[key] = atts[key];
     }
@@ -39,10 +37,6 @@
     }
   }
 
-  //ExpandingAd.prototype.iframeBreakout = function(){
-    //will need to do this inside of the creative code window... including writing this script outside of the fif
-  //}
-  
   ExpandingAd.prototype.writeBackupImage = function(){
     var a = document.createElement('a'),
       img = document.createElement('img');
@@ -58,8 +52,6 @@
     img.height = this.size.height;
     
     this.container.appendChild(a);
-    
-    return this;
   }
 
   ExpandingAd.prototype.styleOuterContainer = function(){
@@ -68,14 +60,17 @@
     c.style.height = this.size.height + 'px';
     c.style.overflow = 'visible';
     c.style.position = 'relative';
-    c.style.zIndex = '1999999';  //IAB max z-index value for expanding ads
+    c.style.margin = '0 auto';
+    
+    //IAB max z-index value for expanding ads
+    c.style.zIndex = '1999999';
     return this;
   }
 
   ExpandingAd.prototype.styleContainer = function(){
     var c = this.container;
     c.style.top = '0';
-    c.style.position = 'relative';
+    c.style.position = 'absolute';
     c.style.right = '0';
     return this;
   }
@@ -85,10 +80,8 @@
       width = this.expanded ? this.size.expWidth : this.size.width,
       height = this.expanded ? this.size.expHeight : this.size.height,
       params = '<param name="movie" value="'+movie+'"/><param name="quality" value="high"/><param name="bgcolor" value="#ffffff"/><param name="play" value="true"/><param name="loop" value="true"/>	<param name="allowFullScreen" value="true"/><param name="wmode" value="transparent"/><param name="devicefont" value="false"/><param name="menu" value="false"/><param name="allowScriptAccess" value="always"/><param name="flashVars" value="'+this.flashVars+'"/>';
-    
+
     this.container.innerHTML = '<object id="FlashID" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+width+'" height="'+height+'" style="outline:none;">'+params+'<!--[if !IE]>--><object type="application/x-shockwave-flash" data="'+ movie +'" width="'+ width +'" height="'+ height +'"  style="outline:none;">'+params+'</object><!--<![endif]--></object>';
-    
-    return this;
   } 
   
   ExpandingAd.prototype.buildFlashVars = function(){
@@ -114,7 +107,6 @@
         this.addPixel(this.pixels.expand);
       }
     }
-    return this;
   }
 
   ExpandingAd.prototype.collapse = function(){
@@ -125,7 +117,6 @@
         this.addPixel(this.pixels.collpase);
       }
     }
-    return this;
   }
   
   ExpandingAd.prototype.resize = function(){
@@ -167,6 +158,7 @@
     return 0;
   }
   
-  wpAd.ExpandingAd = ExpandingAd;
+  window.wpAd = window.wpAd || {};
+  window.wpAd.ExpandingAd = ExpandingAd;
   
 })();
