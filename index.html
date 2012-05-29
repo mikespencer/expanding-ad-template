@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8"> 
@@ -8,8 +8,8 @@
 <body>
 
 
-<div id="%eaid_wrapper">
-  <div id="%eaid_expanding_ad_container"></div>
+<div id="%eaid!_wrapper">
+  <div id="%eaid!_expanding_ad_container"></div>
 </div>
 
 <script type="text/javascript">
@@ -17,14 +17,13 @@
 </script>
 
 <script type="text/javascript">
-  //jQuery.getScript('expandingAd.js', function(){
   jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
-    wpAd['expanding_%eaid!'] = new wpAd.ExpandingAd({
-      'type' : type, //generated via dropdown list
-      'backupImage' : 'http://www.example.com/img.jpg',
-      'colSWF' : 'collapsed.swf',
-      'expSWF' : 'expanded.swf',
-      'adid' : '%eaid',
+    wpAd['expanding_' /* + type */] = new wpAd.ExpandingAd({
+      'type' : '',
+      'backupImage' : '',
+      'colSWF' : '',
+      'expSWF' : '',
+      'adid' : '%eaid!',
       'clickTracker' : '%c',
       'minFlashVer' : 10,
       'clickTags' : {
