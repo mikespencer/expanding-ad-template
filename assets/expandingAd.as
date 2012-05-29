@@ -1,20 +1,19 @@
-﻿//Expanding Flash Template - expanded
+﻿//Expanding Flash Template
 import flash.net.URLRequest;
 
 var paramObj:Object=LoaderInfo(this.root.loaderInfo).parameters;
 
 //add the clickthrus:
 for(var key in paramObj){
-	if(getChildByName(paramObj[key])){
-		getChildByName(paramObj[key]).addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj[e.target.name])})	
+	if(getChildByName(key)){
+		getChildByName(key).addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj[key])})	
 	}
 }
 
-stage.addEventListener(Event.MOUSE_LEAVE, doCollapse);
-function doCollapse(e):void{
-	if(ExternalInterface.available){
-		ExternalInterface.call('wpAd.expanding_' + paramObj['adid'] + '.collapse');
-	}
+function loadMe(url:String):Loader{
+	var loader:Loader = new Loader();
+	loader.load(new URLRequest(url));
+	return loader;
 }
 
 function changePage(url:*, window:String = "_blank"):void {
