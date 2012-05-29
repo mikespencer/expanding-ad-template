@@ -8,22 +8,27 @@
 <body>
 
 
-<div id="%eaid!_wrapper">
-  <div id="%eaid!_expanding_ad_container"></div>
+<div id="12345_wrapper">
+  <div id="12345_expanding_ad_container"></div>
 </div>
+<!--div id="%eaid!_wrapper">
+  <div id="%eaid!_expanding_ad_container"></div>
+</div-->
 
 <script type="text/javascript">
   window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
 </script>
-
+<script type="text/javascript" src="expandingAd.js"></script>
 <script type="text/javascript">
-  jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
-    wpAd['expanding_' /* + type */] = new wpAd.ExpandingAd({
-      'type' : '',
+  jQuery.getScript('expandingAd.js', function(){
+  //jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
+    wpAd['expanding_12345'] = new wpAd.ExpandingAd({
+      'type' : 'bigbox',
       'backupImage' : '',
-      'colSWF' : '',
-      'expSWF' : '',
-      'adid' : '%eaid!',
+      'colSWF' : 'collapsed_bb.swf',
+      'expSWF' : 'expanded_bb.swf',
+      'adid' : '12345',
+      //'adid' : '%eaid!',
       'clickTracker' : '%c',
       'minFlashVer' : 10,
       'clickTags' : {

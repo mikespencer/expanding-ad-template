@@ -13,12 +13,15 @@
       'bigbox' : [['300', '250'], ['600', '250']],
       'halfpage' : [['336', '850'], ['600', '850']]
     }
-    
-    this.size = {
-      width : dimensions[this.type][0][0],
-      height : dimensions[this.type][0][1],
-      expWidth : dimensions[this.type][1][0],
-      expHeight : dimensions[this.type][1][1]
+
+    //ability to add custom sizes within creative code
+    if(!this.size){
+      this.size = {
+        width : dimensions[this.type][0][0],
+        height : dimensions[this.type][0][1],
+        expWidth : dimensions[this.type][1][0],
+        expHeight : dimensions[this.type][1][1]
+      }
     }
     this.expanded = false;
     this.container = document.getElementById(this.adid + '_expanding_ad_container');
@@ -31,7 +34,7 @@
   ExpandingAd.prototype.exec = function(){
     if(this.getFlashVer() >= this.minFlashVer){
       this.flashVars = this.buildFlashVars();
-      this.styleOuterContainer().styleContainer().swfDrop();
+      this.styleOuterContainer().styleContainer().addCollapsed();
     } else {
       this.writeBackupImage();
     }
@@ -81,12 +84,16 @@
       height = this.expanded ? this.size.expHeight : this.size.height,
       params = '<param name="movie" value="'+movie+'"/><param name="quality" value="high"/><param name="bgcolor" value="#ffffff"/><param name="play" value="true"/><param name="loop" value="true"/>	<param name="allowFullScreen" value="true"/><param name="wmode" value="transparent"/><param name="devicefont" value="false"/><param name="menu" value="false"/><param name="allowScriptAccess" value="always"/><param name="flashVars" value="'+this.flashVars+'"/>';
 
-    this.container.innerHTML = '<object id="FlashID" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+width+'" height="'+height+'" style="outline:none;">'+params+'<!--[if !IE]>--><object type="application/x-shockwave-flash" data="'+ movie +'" width="'+ width +'" height="'+ height +'"  style="outline:none;">'+params+'</object><!--<![endif]--></object>';
+    return '<object id="FlashID" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+width+'" height="'+height+'" style="outline:none;">'+params+'<!--[if !IE]>--><object type="application/x-shockwave-flash" data="'+ movie +'" width="'+ width +'" height="'+ height +'"  style="outline:none;">'+params+'</object><!--<![endif]--></object>';
   } 
   
   ExpandingAd.prototype.buildFlashVars = function(){
     var rv = '',
       key;
+
+    if(this.adid){
+      rv = rv + 'adid=' + this.adid;
+    }
 
     for(key in this.clickTags){
       if(this.clickTags.hasOwnProperty(key) && this.clickTags[key]){
@@ -99,10 +106,26 @@
     return rv;
   }
 
+  ExpandingAd.prototype.addExpanded = function(){
+    if(!this.expandedDiv){
+      this.expandedDiv = document.createElement('div');
+      this.expandedDiv.innerHTML = this.swfDrop();
+    }
+    this.container.appendChild(this.expandedDiv);
+  }
+  
+  ExpandingAd.prototype.addCollapsed = function(){
+    if(!this.collapsedDiv){
+      this.collapsedDiv = document.createElement('div');
+      this.collapsedDiv.innerHTML = this.swfDrop();
+    }
+    this.container.appendChild(this.collapsedDiv);
+  }
+  
   ExpandingAd.prototype.expand = function(){
     if(!this.expanded){
       this.expanded = true;
-      this.empty().swfDrop().resize();
+      this.empty().resize().addExpanded();
       if(this.pixels.expand){
         this.addPixel(this.pixels.expand);
       }
@@ -112,9 +135,9 @@
   ExpandingAd.prototype.collapse = function(){
     if(this.expanded){
       this.expanded = false;
-      this.empty().resize().swfDrop();
+      this.empty().resize().addCollapsed();
       if(this.pixels.collapse){
-        this.addPixel(this.pixels.collpase);
+        this.addPixel(this.pixels.collapse);
       }
     }
   }
@@ -142,7 +165,7 @@
 
   ExpandingAd.prototype.addPixel = function(url){
     var i = document.createElement('img');
-    i.src= url;
+    i.src= url.replace(/\[timestamp\]|%n/ig, Math.floor(Math.random()*1E9));
     i.width = '1';
     i.height = '1';
     i.style.display = 'none';
@@ -160,5 +183,4 @@
   
   window.wpAd = window.wpAd || {};
   window.wpAd.ExpandingAd = ExpandingAd;
-  
 })();
