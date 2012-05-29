@@ -15,17 +15,20 @@
   <div id="%eaid!_expanding_ad_container"></div>
 </div-->
 
+<img src="impression pixel" />
+
 <script type="text/javascript">
   window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
 </script>
+
 <script type="text/javascript">
   jQuery.getScript('expandingAd.js', function(){
-  //jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
+//  jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
     wpAd['expanding_12345'] = new wpAd.ExpandingAd({
-      'type' : 'bigbox',
+      'type' : 'leaderboard',
       'backupImage' : '',
-      'colSWF' : 'collapsed_bb.swf',
-      'expSWF' : 'expanded_bb.swf',
+      'colSWF' : 'collapsed.swf',
+      'expSWF' : 'expanded.swf',
       'adid' : '12345',
       //'adid' : '%eaid!',
       'clickTracker' : '',
@@ -39,10 +42,17 @@
         'clickTag6' : ''
       },
       'pixels' : {
+        'main' : 'pixel',
         'expand' : '',
         'collapse' : ''
       }
     });
+    
+    //expanded portion sticking fix:
+    $('#%eaid!_wrapper').mouseout(function(){
+      wpAd['expanding_%eaid!'].collapse();
+    });
+
   });
 </script>
 

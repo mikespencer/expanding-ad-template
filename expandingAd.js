@@ -1,4 +1,4 @@
-(function(){
+(function($){
 
   "use strict";
   
@@ -37,6 +37,9 @@
       this.styleOuterContainer().styleContainer().addCollapsed();
     } else {
       this.writeBackupImage();
+    }
+    if(this.pixels.main){
+      this.addPixel(this.pixels.main);
     }
   }
 
@@ -183,4 +186,4 @@
   
   window.wpAd = window.wpAd || {};
   window.wpAd.ExpandingAd = ExpandingAd;
-})();
+})(jQuery);
