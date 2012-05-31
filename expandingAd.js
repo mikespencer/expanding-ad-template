@@ -1,4 +1,4 @@
-(function($){
+(function(){
 
   "use strict";
   
@@ -78,6 +78,7 @@
     c.style.top = '0';
     c.style.position = 'absolute';
     c.style.right = '0';
+    c.style.backgroundColor = '#fff';
     return this;
   }
 
@@ -186,4 +187,4 @@
   
   window.wpAd = window.wpAd || {};
   window.wpAd.ExpandingAd = ExpandingAd;
-})(jQuery);
+})();

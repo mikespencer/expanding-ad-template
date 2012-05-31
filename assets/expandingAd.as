@@ -1,6 +1,9 @@
 ﻿//Expanding Flash Template
 import flash.net.URLRequest;
 
+flash.system.Security.allowDomain("*");
+flash.system.Security.allowInsecureDomain("*");
+
 var paramObj:Object=LoaderInfo(this.root.loaderInfo).parameters;
 
 //add the clickthrus:
@@ -9,6 +12,27 @@ for(var key in paramObj){
 		getChildByName(key).addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj[key])})	
 	}
 }
+
+/*
+if(getChildByName('clickTag') && paramObj['clickTag']){
+	getChildByName('clickTag').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag'])});
+}
+if(getChildByName('clickTag2') && paramObj['clickTag2']){
+	getChildByName('clickTag2').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag2'])});
+}
+if(getChildByName('clickTag3') && paramObj['clickTag3']){
+	getChildByName('clickTag3').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag3'])});
+}
+if(getChildByName('clickTag4') && paramObj['clickTag4']){
+	getChildByName('clickTag4').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag4'])});
+}
+if(getChildByName('clickTag5') && paramObj['clickTag5']){
+	getChildByName('clickTag5').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag5'])});
+}
+if(getChildByName('clickTag6') && paramObj['clickTag6']){
+	getChildByName('clickTag6').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag6'])});
+}
+*/
 
 function loadMe(url:String):Loader{
 	var loader:Loader = new Loader();
