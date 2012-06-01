@@ -19,14 +19,16 @@
   window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
 </script>
 
+<script type="text/javascript" src="expandingAd.js"></script>
+
 <script type="text/javascript">
-  jQuery.getScript('expandingAd.js', function(){
+  //jQuery.getScript('expandingAd.js', function(){
 //  jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
     wpAd['expanding_12345'] = new wpAd.ExpandingAd({
       'type' : 'leaderboard',
       'backupImage' : '',
-      'colSWF' : 'collapsed.swf',
-      'expSWF' : 'expanded.swf',
+      'colSWF' : 'assets/collapsed.swf',
+      'expSWF' : 'assets/expanded.swf',
       'adid' : '12345',
       //'adid' : '%eaid!',
       'clickTracker' : '',
@@ -46,17 +48,7 @@
       }
     });
     
-    //expanded portion sticking fix:
-   /* $('#%eaid!_wrapper').mouseout(function(){
-      wpAd['expanding_%eaid!'].collapse();
-    });   */
-    
-    //expanded portion sticking fix:
-    $('#12345_wrapper').mouseout(function(){
-      wpAd['expanding_12345'].collapse();
-    });
-
-  });
+  //});
 </script>
 
 </body>

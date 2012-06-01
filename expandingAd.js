@@ -34,7 +34,14 @@
   ExpandingAd.prototype.exec = function(){
     if(this.getFlashVer() >= this.minFlashVer){
       this.flashVars = this.buildFlashVars();
-      this.styleOuterContainer().styleContainer().addCollapsed();
+      this.styleOuterContainer().styleContainer().buildCollapsed().addCollapsed();
+
+      // this.onLoadCallback failing to be called in IE on initial load due to IE/Flash/ExternalInterface bug. 
+      //Fix to allow expansion on initial load:
+      if(/msie/i.test(navigator.userAgent)){
+        this.loaded = true;
+      }
+
     } else {
       this.writeBackupImage();
     }
@@ -79,6 +86,7 @@
     c.style.position = 'absolute';
     c.style.right = '0';
     c.style.backgroundColor = '#fff';
+    c.style.overflow = 'hidden';
     return this;
   }
 
@@ -86,9 +94,9 @@
     var movie = this.expanded ? this.expSWF : this.colSWF,
       width = this.expanded ? this.size.expWidth : this.size.width,
       height = this.expanded ? this.size.expHeight : this.size.height,
-      params = '<param name="movie" value="'+movie+'"/><param name="quality" value="high"/><param name="bgcolor" value="#ffffff"/><param name="play" value="true"/><param name="loop" value="true"/>	<param name="allowFullScreen" value="true"/><param name="wmode" value="transparent"/><param name="devicefont" value="false"/><param name="menu" value="false"/><param name="allowScriptAccess" value="always"/><param name="flashVars" value="'+this.flashVars+'"/>';
+      params = '<param name="movie" value="'+movie+'"/><param name="quality" value="high"/><param name="bgcolor" value="#ffffff"/><param name="wmode" value="transparent"/><param name="allowScriptAccess" value="always"/><param name="flashVars" value="'+this.flashVars+'"/>';
 
-    return '<object id="FlashID" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+width+'" height="'+height+'" style="outline:none;">'+params+'<!--[if !IE]>--><object type="application/x-shockwave-flash" data="'+ movie +'" width="'+ width +'" height="'+ height +'"  style="outline:none;">'+params+'</object><!--<![endif]--></object>';
+    return '<object id="'+this.adid+(this.expanded ? '_expanded' : '_collapsed')+'_creative" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+width+'" height="'+height+'" style="outline:none;">'+params+'<!--[if !IE]>--><object type="application/x-shockwave-flash" data="'+ movie +'" width="'+ width +'" height="'+ height +'"  style="outline:none;">'+params+'</object><!--<![endif]--></object>';
   } 
   
   ExpandingAd.prototype.buildFlashVars = function(){
@@ -109,27 +117,32 @@
     }
     return rv;
   }
-
-  ExpandingAd.prototype.addExpanded = function(){
-    if(!this.expandedDiv){
-      this.expandedDiv = document.createElement('div');
-      this.expandedDiv.innerHTML = this.swfDrop();
-    }
-    this.container.appendChild(this.expandedDiv);
+  
+  ExpandingAd.prototype.buildExpanded = function(){
+    this.expandedDiv = document.createElement('div');
+    this.expandedDiv.innerHTML = this.swfDrop();
+    return this;
   }
   
+  ExpandingAd.prototype.buildCollapsed = function(){
+    this.collapsedDiv = document.createElement('div');
+    this.collapsedDiv.innerHTML = this.swfDrop();
+    return this;
+  }
+  
+  ExpandingAd.prototype.addExpanded = function(){
+    this.container.appendChild(this.expandedDiv);
+  }
+
   ExpandingAd.prototype.addCollapsed = function(){
-    if(!this.collapsedDiv){
-      this.collapsedDiv = document.createElement('div');
-      this.collapsedDiv.innerHTML = this.swfDrop();
-    }
     this.container.appendChild(this.collapsedDiv);
   }
   
   ExpandingAd.prototype.expand = function(){
-    if(!this.expanded){
+    if(!this.expanded && this.loaded){
+      this.loaded = false;
       this.expanded = true;
-      this.empty().resize().addExpanded();
+      this.buildExpanded().addExpanded();
       if(this.pixels.expand){
         this.addPixel(this.pixels.expand);
       }
@@ -137,13 +150,27 @@
   }
 
   ExpandingAd.prototype.collapse = function(){
-    if(this.expanded){
+    if(this.expanded && this.loaded){
+      this.loaded = false;
       this.expanded = false;
-      this.empty().resize().addCollapsed();
+      this.buildCollapsed().addCollapsed();
       if(this.pixels.collapse){
         this.addPixel(this.pixels.collapse);
       }
     }
+  }
+  
+  //called from the .swf once it has been loaded:
+  ExpandingAd.prototype.onLoadCallback = function(){
+    console.log('loaded');
+    this.loaded = true;
+    this.resize().cleanUp();
+    
+    //temporary fix...
+    //fixed with this.loaded check
+    /*if(this.container.childNodes.length > 2){
+      this.empty().addCollapsed();
+    } else{this.resize().cleanUp();}*/
   }
   
   ExpandingAd.prototype.resize = function(){
@@ -165,6 +192,10 @@
       }
     }
     return this;
+  } 
+  
+  ExpandingAd.prototype.cleanUp = function(){
+    this.container.removeChild(this.expanded ? this.collapsedDiv : this.expandedDiv);
   }
 
   ExpandingAd.prototype.addPixel = function(url){

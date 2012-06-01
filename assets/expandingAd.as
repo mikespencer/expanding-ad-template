@@ -6,14 +6,15 @@ flash.system.Security.allowInsecureDomain("*");
 
 var paramObj:Object=LoaderInfo(this.root.loaderInfo).parameters;
 
-//add the clickthrus:
-for(var key in paramObj){
-	if(getChildByName(key)){
-		getChildByName(key).addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj[key])})	
+if(ExternalInterface.available){
+	ExternalInterface.call('function(){ try{ wpAd["expanding_' + paramObj['adid'] + '"].onLoadCallback() }catch(e){}}');
+	stage.addEventListener(Event.MOUSE_LEAVE, doCollapse);
+	
+	if(getChildByName('expand')){
+		getChildByName('expand').addEventListener(MouseEvent.MOUSE_OVER, doExpand);
 	}
 }
 
-/*
 if(getChildByName('clickTag') && paramObj['clickTag']){
 	getChildByName('clickTag').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag'])});
 }
@@ -32,7 +33,15 @@ if(getChildByName('clickTag5') && paramObj['clickTag5']){
 if(getChildByName('clickTag6') && paramObj['clickTag6']){
 	getChildByName('clickTag6').addEventListener(MouseEvent.CLICK, function(e){changePage(paramObj['clickTag6'])});
 }
-*/
+
+
+function doCollapse(e):void{
+	ExternalInterface.call('wpAd.expanding_' + paramObj['adid'] + '.collapse');
+}
+
+function doExpand(e):void{
+	ExternalInterface.call('wpAd.expanding_' + paramObj['adid'] + '.expand');
+}
 
 function loadMe(url:String):Loader{
 	var loader:Loader = new Loader();
