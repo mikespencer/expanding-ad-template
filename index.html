@@ -8,12 +8,6 @@
 <body>
 
 
-<div id="12345_wrapper">
-  <div id="12345_expanding_ad_container"></div>
-</div>
-<!--div id="%eaid!_wrapper">
-  <div id="%eaid!_expanding_ad_container"></div>
-</div-->
 
 <script type="text/javascript">
   window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
@@ -22,15 +16,18 @@
 <script type="text/javascript" src="expandingAd.js"></script>
 
 <script type="text/javascript">
-  //jQuery.getScript('expandingAd.js', function(){
-//  jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
-    wpAd['expanding_12345'] = new wpAd.ExpandingAd({
+  //for compatibility in DFP preview window:
+  window.expAdAdId = parseInt('%eaid!') || Math.floor(Math.random()*1E9);
+  
+  document.write('<div id="' + (parseInt('%eaid!') || window.expAdAdId) + '_wrapper"><div id="' + (parseInt('%eaid!') || window.expAdAdId) + '_expanding_ad_container"></div></div>');
+  
+  //jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
+    wpAd['expanding_' + (parseInt('%eaid!') || window.expAdAdId)] = new wpAd.ExpandingAd({
       'type' : 'leaderboard',
       'backupImage' : '',
       'colSWF' : 'assets/collapsed.swf',
       'expSWF' : 'assets/expanded.swf',
-      'adid' : '12345',
-      //'adid' : '%eaid!',
+      'adid' : parseInt('%eaid!') || window.expAdAdId,
       'clickTracker' : '',
       'minFlashVer' : 10,
       'clickTags' : {
@@ -42,13 +39,19 @@
         'clickTag6' : ''
       },
       'pixels' : {
-        'main' : 'pixel',
+        'main' : '',
         'expand' : '',
         'collapse' : ''
       }
     });
-    
-  //});
+
+    jQuery('#' + (parseInt('%eaid!') || window.expAdAdId) + '_expanding_ad_container').mouseleave(function(e){
+      wpAd['expanding_' + (parseInt('%eaid!') || window.expAdAdId)].collapse();
+    }).mouseover(function(e){
+      wpAd['expanding_' + (parseInt('%eaid!') || window.expAdAdId)].expand();
+    });
+
+ // });
 </script>
 
 </body>

@@ -14,7 +14,6 @@
       'halfpage' : [['336', '850'], ['600', '850']]
     }
 
-    //ability to add custom sizes within creative code
     if(!this.size){
       this.size = {
         width : dimensions[this.type][0][0],
@@ -23,7 +22,9 @@
         expHeight : dimensions[this.type][1][1]
       }
     }
+    
     this.expanded = false;
+    this.loading = false;
     this.container = document.getElementById(this.adid + '_expanding_ad_container');
     this.outerContainer = this.container.parentNode;
     this.exec();
@@ -34,14 +35,7 @@
   ExpandingAd.prototype.exec = function(){
     if(this.getFlashVer() >= this.minFlashVer){
       this.flashVars = this.buildFlashVars();
-      this.styleOuterContainer().styleContainer().buildCollapsed().addCollapsed();
-
-      // this.onLoadCallback failing to be called in IE on initial load due to IE/Flash/ExternalInterface bug. 
-      //Fix to allow expansion on initial load:
-      if(/msie/i.test(navigator.userAgent)){
-        this.loaded = true;
-      }
-
+      this.styleOuterContainer().styleContainer().buildCollapsed().addCollapsed().resize();
     } else {
       this.writeBackupImage();
     }
@@ -87,6 +81,7 @@
     c.style.right = '0';
     c.style.backgroundColor = '#fff';
     c.style.overflow = 'hidden';
+    c.style.cursor = 'pointer';
     return this;
   }
 
@@ -132,55 +127,41 @@
   
   ExpandingAd.prototype.addExpanded = function(){
     this.container.appendChild(this.expandedDiv);
+    return this;
   }
 
   ExpandingAd.prototype.addCollapsed = function(){
     this.container.appendChild(this.collapsedDiv);
+    return this;
   }
   
   ExpandingAd.prototype.expand = function(){
-    if(!this.expanded && this.loaded){
-      this.loaded = false;
+    if(!this.expanded && !this.loading){
+      this.loading = true;
       this.expanded = true;
-      this.buildExpanded().addExpanded();
+      this.buildExpanded().addExpanded().resize().cleanUp();
       if(this.pixels.expand){
         this.addPixel(this.pixels.expand);
       }
+      this.loading = false;
     }
   }
 
   ExpandingAd.prototype.collapse = function(){
-    if(this.expanded && this.loaded){
-      this.loaded = false;
+    if(this.expanded && !this.loading){
+      this.loading = true;
       this.expanded = false;
-      this.buildCollapsed().addCollapsed();
+      this.buildCollapsed().addCollapsed().resize().cleanUp();
       if(this.pixels.collapse){
         this.addPixel(this.pixels.collapse);
       }
+      this.loading = false;
     }
   }
-  
-  //called from the .swf once it has been loaded:
-  ExpandingAd.prototype.onLoadCallback = function(){
-    console.log('loaded');
-    this.loaded = true;
-    this.resize().cleanUp();
-    
-    //temporary fix...
-    //fixed with this.loaded check
-    /*if(this.container.childNodes.length > 2){
-      this.empty().addCollapsed();
-    } else{this.resize().cleanUp();}*/
-  }
-  
+
   ExpandingAd.prototype.resize = function(){
-    if(this.expanded){
-      this.container.style.width = this.size.expWidth + 'px';
-      this.container.style.height = this.size.expHeight + 'px';
-    } else {
-      this.container.style.width = this.size.width + 'px';
-      this.container.style.height = this.size.height + 'px';
-    }
+    this.container.style.width = (this.expanded ? this.size.expWidth : this.size.width) + 'px';
+    this.container.style.height = (this.expanded ? this.size.expHeight : this.size.height) + 'px';
     return this;
   }
   
@@ -195,7 +176,9 @@
   } 
   
   ExpandingAd.prototype.cleanUp = function(){
-    this.container.removeChild(this.expanded ? this.collapsedDiv : this.expandedDiv);
+    try{
+      this.container.removeChild(this.expanded ? this.collapsedDiv : this.expandedDiv);
+    } catch (e){}
   }
 
   ExpandingAd.prototype.addPixel = function(url){
