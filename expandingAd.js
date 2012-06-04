@@ -70,7 +70,7 @@
     c.style.margin = '0 auto';
     
     //IAB max z-index value for expanding ads
-    c.style.zIndex = '1999999';
+    c.style.zIndex = this.type === 'leaderboard' ? '1999999' : '1999998';
     return this;
   }
 
