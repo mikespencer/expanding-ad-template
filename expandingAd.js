@@ -68,9 +68,6 @@
     c.style.overflow = 'visible';
     c.style.position = 'relative';
     c.style.margin = '0 auto';
-    
-    //IAB max z-index value for expanding ads
-    c.style.zIndex = this.type === 'leaderboard' ? '1999999' : '1999998';
     return this;
   }
 
@@ -160,8 +157,13 @@
   }
 
   ExpandingAd.prototype.resize = function(){
+    //IAB max z-index value for expanding ads
+    this.outerContainer.style.zIndex = this.expanded ? '1999999' : '1';
+    this.container.style.zIndex = this.expanded ? '1999999' : '1';
+    
     this.container.style.width = (this.expanded ? this.size.expWidth : this.size.width) + 'px';
     this.container.style.height = (this.expanded ? this.size.expHeight : this.size.height) + 'px';
+    
     return this;
   }
   
