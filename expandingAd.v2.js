@@ -37,7 +37,7 @@
 
   ExpandingAd.prototype.exec = function(){
     this.styleOuterContainer().styleContainer();
-    if(this.getFlashVer() >= this.minFlashVer){
+    if((this.getFlashVer() >= this.minFlashVer) || (this.staticCol && this.staticExp)){
       this.flashVars = this.buildFlashVars();
       this.buildCollapsed().addCollapsed().resize();
     } else {
