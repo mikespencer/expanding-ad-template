@@ -37,6 +37,7 @@
       this.flashVars = this.buildFlashVars();
       this.styleOuterContainer().styleContainer().buildCollapsed().addCollapsed().resize();
     } else {
+      this.noFlash = true;
       this.writeBackupImage();
     }
     if(this.pixels.main){
@@ -133,7 +134,7 @@
   }
   
   ExpandingAd.prototype.expand = function(){
-    if(!this.expanded && !this.loading){
+    if(!this.noFlash && !this.expanded && !this.loading){
       this.loading = true;
       this.expanded = true;
       this.buildExpanded().addExpanded().resize().cleanUp();
@@ -145,7 +146,7 @@
   }
 
   ExpandingAd.prototype.collapse = function(){
-    if(this.expanded && !this.loading){
+    if(!this.noFlash && this.expanded && !this.loading){
       this.loading = true;
       this.expanded = false;
       this.buildCollapsed().addCollapsed().resize().cleanUp();
