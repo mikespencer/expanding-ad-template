@@ -1,0 +1,1 @@
+Expanding ad template for use in DFP.

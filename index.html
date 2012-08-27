@@ -2,34 +2,31 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8"> 
-	<title></title>
+	<title>Expanding Ad Demo</title>
 
 </head>
 <body>
 
+  <script type="text/javascript">
+    window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
+  </script>
 
+  <script type="text/javascript" src="expandingAd.v2.js"></script>
 
-<script type="text/javascript">
-  window.jQuery || document.write('<scri' + 'pt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></sc' + 'ript>');
-</script>
-
-<script type="text/javascript" src="expandingAd.v2.js"></script>
-
-<script type="text/javascript">
-  //for compatibility in DFP preview window:
-  window.expAdAdId = parseInt('%eaid!') || Math.floor(Math.random()*1E9);
-  
-  document.write('<div id="' + (parseInt('%eaid!') || window.expAdAdId) + '_wrapper"><div id="' + (parseInt('%eaid!') || window.expAdAdId) + '_expanding_ad_container"></div></div>');
-  
-  //jQuery.getScript('http://js.washingtonpost.com/wp-srv/ad/expandingAd.js', function(){
-    wpAd['expanding_' + (parseInt('%eaid!') || window.expAdAdId)] = new wpAd.ExpandingAd({
+  <script type="text/javascript">
+    //for compatibility in DFP preview window:
+    window.expAdAdId = parseInt('%eaid!', 10) || Math.floor(Math.random()*1E9);
+    
+    document.write('<div id="' + window.expAdAdId + '_wrapper"><div id="' + window.expAdAdId + '_expanding_ad_container"></div></div>');
+    
+    wpAd['expanding_' + window.expAdAdId] = new wpAd.ExpandingAd({
       'type' : 'leaderboard',
       'backupImage' : '',
       'colSWF' : 'assets/collapsed.swf',
       //'colSWF' : 'http://s0.2mdn.net/864958/728x90-stay-play-for-expanding.jpg',
       'expSWF' : 'assets/expanded.swf',
       //'expSWF' : 'http://s0.2mdn.net/864958/728x360-stay-play.jpg',
-      'adid' : parseInt('%eaid!') || window.expAdAdId,
+      'adid' : window.expAdAdId,
       'clickTracker' : '',
       'minFlashVer' : 10,
       'clickTags' : {
@@ -47,14 +44,12 @@
       }
     });
 
-    jQuery('#' + (parseInt('%eaid!') || window.expAdAdId) + '_expanding_ad_container').mouseleave(function(e){
-      wpAd['expanding_' + (parseInt('%eaid!') || window.expAdAdId)].collapse();
+    jQuery('#' + window.expAdAdId + '_expanding_ad_container').mouseleave(function(e){
+      wpAd['expanding_' + window.expAdAdId].collapse();
     }).mouseover(function(e){
-      wpAd['expanding_' + (parseInt('%eaid!') || window.expAdAdId)].expand();
+      wpAd['expanding_' + window.expAdAdId].expand();
     });
-
- // });
-</script>
+  </script>
 
 </body>
 </html>
