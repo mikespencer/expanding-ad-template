@@ -1,4 +1,13 @@
-(function(){
+/**
+  * @Author michael.spencer@washingtonpost.com (Mike Spencer)
+  * @fileoverview Expanding Ad Template for all types of expandable ad types.
+  * Accepts 2 flash creatives, 2 image creatives, or a combination of 1 Flash 1
+  * image creative. Requires jQuery. For use on washingtonpost.com.
+  */
+
+/*global ActiveXObject*/
+var wpAd = window.wpAd || {};
+(function(w, d, undefined){
 
   "use strict";
   
@@ -12,7 +21,7 @@
       'leaderboard' : [['728', '90'], ['728', '360']],
       'bigbox' : [['300', '250'], ['600', '250']],
       'halfpage' : [['336', '850'], ['600', '850']]
-    }
+    };
 
     if(!this.size){
       this.size = {
@@ -20,7 +29,7 @@
         height : dimensions[this.type][0][1],
         expWidth : dimensions[this.type][1][0],
         expHeight : dimensions[this.type][1][1]
-      }
+      };
     }
 
     this.staticCol = /\.swf$/i.test(this.colSWF) ? false : this.buildImage(this.colSWF, false);
@@ -28,7 +37,7 @@
 
     this.expanded = false;
     this.loading = false;
-    this.container = document.getElementById(this.adid + '_expanding_ad_container');
+    this.container = d.getElementById(this.adid + '_expanding_ad_container');
     this.outerContainer = this.container.parentNode;
     this.exec();
 
@@ -47,11 +56,11 @@
     if(this.pixels.main){
       this.addPixel(this.pixels.main);
     }
-  }
+  };
 
   ExpandingAd.prototype.buildImage = function(image, expState){
-    var a = document.createElement('a'),
-      img = document.createElement('img');
+    var a = d.createElement('a'),
+      img = d.createElement('img');
 
     a.href = this.clickTracker + this.clickTags.clickTag;
     a.target = '_blank';
@@ -65,7 +74,7 @@
     img.height = expState ? this.size.expHeight : this.size.height;
 
     return a;
-  }
+  };
 
   ExpandingAd.prototype.styleOuterContainer = function(){
     var c = this.outerContainer;
@@ -75,7 +84,7 @@
     c.style.position = 'relative';
     c.style.margin = '0 auto';
     return this;
-  }
+  };
 
   ExpandingAd.prototype.styleContainer = function(){
     var c = this.container;
@@ -86,7 +95,7 @@
     c.style.overflow = 'hidden';
     c.style.cursor = 'pointer';
     return this;
-  }
+  };
 
   ExpandingAd.prototype.swfDrop = function(){
     var movie = this.expanded ? this.expSWF : this.colSWF,
@@ -95,7 +104,7 @@
       params = '<param name="movie" value="'+movie+'"/><param name="quality" value="high"/><param name="bgcolor" value="#ffffff"/><param name="wmode" value="transparent"/><param name="allowScriptAccess" value="always"/><param name="flashVars" value="'+this.flashVars+'"/>';
 
     return '<object id="'+this.adid+(this.expanded ? '_expanded' : '_collapsed')+'_creative" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+width+'" height="'+height+'" style="outline:none;">'+params+'<!--[if !IE]>--><object type="application/x-shockwave-flash" data="'+ movie +'" width="'+ width +'" height="'+ height +'"  style="outline:none;">'+params+'</object><!--<![endif]--></object>';
-  } 
+  }; 
   
   ExpandingAd.prototype.buildFlashVars = function(){
     var rv = '',
@@ -114,37 +123,37 @@
       }
     }
     return rv;
-  }
+  };
   
   ExpandingAd.prototype.buildExpanded = function(){
-    this.expandedDiv = document.createElement('div');
+    this.expandedDiv = d.createElement('div');
     if(!this.staticExp){
       this.expandedDiv.innerHTML = this.swfDrop();
     } else{
       this.expandedDiv.appendChild(this.staticExp);
     }
     return this;
-  }
+  };
   
   ExpandingAd.prototype.buildCollapsed = function(){
-    this.collapsedDiv = document.createElement('div');
+    this.collapsedDiv = d.createElement('div');
     if(!this.staticCol){
       this.collapsedDiv.innerHTML = this.swfDrop();
     } else{
       this.collapsedDiv.appendChild(this.staticCol);
     }
     return this;
-  }
+  };
   
   ExpandingAd.prototype.addExpanded = function(){
     this.container.appendChild(this.expandedDiv);
     return this;
-  }
+  };
 
   ExpandingAd.prototype.addCollapsed = function(){
     this.container.appendChild(this.collapsedDiv);
     return this;
-  }
+  };
   
   ExpandingAd.prototype.expand = function(){
     if(!this.noFlash && !this.expanded && !this.loading){
@@ -156,7 +165,7 @@
       }
       this.loading = false;
     }
-  }
+  };
 
   ExpandingAd.prototype.collapse = function(){
     if(!this.noFlash && this.expanded && !this.loading){
@@ -168,7 +177,7 @@
       }
       this.loading = false;
     }
-  }
+  };
 
   ExpandingAd.prototype.resize = function(){
     //IAB max z-index value for expanding ads
@@ -179,7 +188,7 @@
     this.container.style.height = (this.expanded ? this.size.expHeight : this.size.height) + 'px';
     
     return this;
-  }
+  };
   
   ExpandingAd.prototype.empty = function(){
     if(this.container && this.container.hasChildNodes()){
@@ -189,16 +198,16 @@
       }
     }
     return this;
-  } 
+  }; 
   
   ExpandingAd.prototype.cleanUp = function(){
     try{
       this.container.removeChild(this.expanded ? this.collapsedDiv : this.expandedDiv);
     } catch (e){}
-  }
+  };
 
   ExpandingAd.prototype.addPixel = function(url){
-    var i = document.createElement('img');
+    var i = d.createElement('img');
     i.src= url.replace(/\[timestamp\]|%n/ig, Math.floor(Math.random()*1E9));
     i.width = '1';
     i.height = '1';
@@ -206,15 +215,15 @@
     i.style.border = '0';
     i.alt= '';
     this.outerContainer.appendChild(i);
-  }
+  };
   
   ExpandingAd.prototype.getFlashVer = function(){
-    var i,a,o,p,s="Shockwave",f="Flash",t=" 2.0",u=s+" "+f,v=s+f+".",rSW=RegExp("^"+u+" (\\d+)");
+    var i,a,o,p,s="Shockwave",f="Flash",t=" 2.0",u=s+" "+f,v=s+f+".",rSW=new RegExp("^"+u+" (\\d+)");
     if((o=navigator.plugins)&&(p=o[u]||o[u+t])&&(a=p.description.match(rSW)))return a[1];
-    else if(!!(window.ActiveXObject))for(i=10;i>0;i--)try{if(!!(new ActiveXObject(v+v+i)))return i}catch(e){}
+    else if(!!(w.ActiveXObject))for(i=10;i>0;i--)try{if(!!(new ActiveXObject(v+v+i)))return i;}catch(e){}
     return 0;
-  }
+  };
   
-  window.wpAd = window.wpAd || {};
-  window.wpAd.ExpandingAd = ExpandingAd;
-})();
+  wpAd.ExpandingAd = ExpandingAd;
+  
+})(window, document);
